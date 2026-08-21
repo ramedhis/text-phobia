@@ -14,6 +14,7 @@
 <div class="app">
 
   <button class="menu-toggle" id="menuToggleBtn" title="Hide menu">‹</button>
+  <button class="theme-toggle" id="themeToggleBtn" title="Toggle light / dark UI">Light</button>
 
   <div class="rack" id="rack">
     <p class="brand">text<span>phobia</span></p>
@@ -63,6 +64,10 @@
           <div class="chip" data-align="right">Right</div>
           <div class="chip" data-align="justify">Justify</div>
         </div>
+      </div>
+      <div class="field checkfield" style="margin-top:10px;">
+        <input type="checkbox" id="hyphenate">
+        <label for="hyphenate">Chop long words with a hyphen to fit the line</label>
       </div>
     </div>
 
@@ -230,7 +235,7 @@
   <div class="stage-wrap">
     <div class="stage" id="stage">
       <canvas id="canvas" width="1080" height="1350"></canvas>
-      <div class="fear-badge" id="radiusBadge">RADIUS <span id="badgeRadius">140</span>px</div>
+      <div class="fear-badge" id="radiusBadge"><span>RADIUS</span><span><span id="badgeRadius">140</span>px</span></div>
       <div class="panic" id="panicBadge">PANIC<div class="panic-bar"><div class="panic-fill" id="panicFill"></div></div></div>
     </div>
   </div>

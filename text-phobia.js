@@ -27,6 +27,7 @@ const state = {
   autoScroll: false,
   autoScrollSpeed: 40,
   showScrollbar: true,
+  hyphenate: false,
   zoom: 1
 };
 
@@ -48,6 +49,40 @@ function contentBox(){
   const w = canvas.width - state.marginLeft - state.marginRight;
   const h = canvas.height - state.marginTop - state.marginBottom;
   return {x, y, w: Math.max(10,w), h: Math.max(10,h)};
+}
+
+// --- Color helpers: derive the on-canvas indicator colors (margin guide,
+// scrollbar, radius circle, pointer dot, panic bits) from whatever text/bg
+// colors the user picked, instead of a hardcoded accent color.
+function hexToRgb(hex){
+  let h = (hex || '#ffffff').replace('#','');
+  if(h.length === 3) h = h.split('').map(c=>c+c).join('');
+  const num = parseInt(h, 16) || 0;
+  return { r:(num>>16)&255, g:(num>>8)&255, b:num&255 };
+}
+function relativeLightness(hex){
+  const {r,g,b} = hexToRgb(hex);
+  return (0.299*r + 0.587*g + 0.114*b) / 255;
+}
+function hexToRgba(hex, alpha){
+  const {r,g,b} = hexToRgb(hex);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// Updates the DOM badges (fear radius label, panic label + bar) to sit
+// comfortably on top of whatever background color the canvas currently has.
+function applyCanvasAccent(){
+  const bgIsLight = relativeLightness(state.bgColor) > 0.55;
+  const overlay = bgIsLight ? '0,0,0' : '255,255,255';
+  const badgeBg = `rgba(${overlay},0.45)`;
+  document.querySelectorAll('.fear-badge, .panic').forEach(el=>{
+    el.style.background = badgeBg;
+    el.style.color = state.textColor;
+  });
+  const panicBar = document.querySelector('.panic-bar');
+  if(panicBar) panicBar.style.background = `rgba(${overlay},0.25)`;
+  const panicFill = document.getElementById('panicFill');
+  if(panicFill) panicFill.style.background = state.textColor;
 }
 
 function layoutText(){
@@ -100,15 +135,84 @@ function layoutText(){
       lineWidth = 0;
     }
 
-    words.forEach(word => {
-      const wWidth = [...word].reduce((a,c)=>a+ctx.measureText(c).width,0);
-      const extra = lineWords.length>0 ? spaceWidth : 0;
-      if(lineWidth + extra + wWidth > box.w && lineWords.length>0){
-        flushLine(false);
+    function measureWord(w){
+      return [...w].reduce((a,c)=>a+ctx.measureText(c).width,0);
+    }
+
+    // Tries to split `word` into a hyphenated chunk that fits `availWidth`
+    // plus a remainder. Follows basic hyphenation etiquette: never strand a
+    // single letter on either side of the hyphen. Returns null if a decent
+    // break isn't possible, so the caller falls back to normal wrapping.
+    function breakWord(word, availWidth){
+      const MIN_BEFORE = 2; // min letters kept before the hyphen
+      const MIN_AFTER = 2;  // min letters pushed to the next line
+      const chars = [...word];
+      if(chars.length < MIN_BEFORE + MIN_AFTER) return null; // too short to hyphenate decently
+
+      const hyphenWidth = ctx.measureText('-').width;
+      let w = 0, count = 0;
+      for(let i=0; i<chars.length; i++){
+        const cw = ctx.measureText(chars[i]).width;
+        if(w + cw + hyphenWidth > availWidth) break;
+        w += cw;
+        count++;
       }
-      lineWords.push(word);
-      lineWidth += extra + wWidth;
-    });
+      // Clamp to the largest break point that still respects both minimums.
+      const maxCount = chars.length - MIN_AFTER;
+      if(count > maxCount) count = maxCount;
+      if(count < MIN_BEFORE) return null;
+
+      // Recompute the exact width for the clamped count.
+      w = 0;
+      for(let i=0; i<count; i++) w += ctx.measureText(chars[i]).width;
+
+      return {
+        chunk: chars.slice(0, count).join('') + '-',
+        chunkWidth: w + hyphenWidth,
+        rest: chars.slice(count).join('')
+      };
+    }
+
+    const queue = words.slice();
+    let qi = 0;
+    while(qi < queue.length){
+      const word = queue[qi];
+      const wWidth = measureWord(word);
+      const extra = lineWords.length>0 ? spaceWidth : 0;
+      const avail = box.w - lineWidth - extra;
+
+      if(wWidth <= avail){
+        lineWords.push(word);
+        lineWidth += extra + wWidth;
+        qi++;
+        continue;
+      }
+
+      if(state.hyphenate){
+        const brk = breakWord(word, Math.max(0, avail));
+        if(brk){
+          lineWords.push(brk.chunk);
+          lineWidth += extra + brk.chunkWidth;
+          flushLine(false);
+          queue[qi] = brk.rest;
+          continue; // reprocess the leftover chunk on the fresh line
+        }
+      }
+
+      if(lineWords.length === 0){
+        // Nothing to break onto a fresh line, and it still doesn't fit
+        // (or hyphenation is off / found no room) — place it as-is rather
+        // than looping forever; it may overflow the box slightly.
+        lineWords.push(word);
+        lineWidth += wWidth;
+        qi++;
+        continue;
+      }
+
+      // Doesn't fit and couldn't be split usefully — push the whole word
+      // to the next line, same as the original behavior.
+      flushLine(false);
+    }
     if(lineWords.length>0) flushLine(true);
   });
 
@@ -274,7 +378,7 @@ function render(){
 
   if(state.showGuide){
     ctx.save();
-    ctx.strokeStyle = 'rgba(232,163,61,0.35)';
+    ctx.strokeStyle = hexToRgba(state.textColor, 0.35);
     ctx.setLineDash([6,5]);
     ctx.lineWidth = 1.5;
     ctx.strokeRect(box.x, box.y, box.w, box.h);
@@ -286,10 +390,11 @@ function render(){
     const trackX = canvas.width - 12;
     const thumbH = Math.max(24, box.h * (box.h/totalContentHeight));
     const thumbY = box.y + (box.h - thumbH) * (scrollY/maxScroll);
+    const bgOverlay = relativeLightness(state.bgColor) > 0.55 ? '0,0,0' : '255,255,255';
     ctx.save();
-    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.fillStyle = `rgba(${bgOverlay},0.1)`;
     ctx.fillRect(trackX, box.y, 5, box.h);
-    ctx.fillStyle = 'rgba(232,163,61,0.6)';
+    ctx.fillStyle = hexToRgba(state.textColor, 0.6);
     ctx.fillRect(trackX, thumbY, 5, thumbH);
     ctx.restore();
   }
@@ -301,7 +406,7 @@ function render(){
   if(cursorForDraw){
     if(state.showRadius){
       ctx.save();
-      ctx.strokeStyle = 'rgba(232,163,61,0.5)';
+      ctx.strokeStyle = hexToRgba(state.textColor, 0.5);
       ctx.setLineDash([4,4]);
       ctx.lineWidth = 1.5;
       ctx.beginPath();
@@ -311,7 +416,7 @@ function render(){
     }
     if(state.showPointer){
       ctx.save();
-      ctx.fillStyle = '#e8a33d';
+      ctx.fillStyle = state.textColor;
       ctx.beginPath();
       ctx.arc(cursorForDraw.x, cursorForDraw.y, 6, 0, Math.PI*2);
       ctx.fill();
@@ -413,8 +518,8 @@ document.querySelectorAll('#alignToggle .chip').forEach(chip => {
   });
 });
 
-document.getElementById('textColor').addEventListener('input', (e)=>{ state.textColor = e.target.value; });
-document.getElementById('bgColor').addEventListener('input', (e)=>{ state.bgColor = e.target.value; });
+document.getElementById('textColor').addEventListener('input', (e)=>{ state.textColor = e.target.value; applyCanvasAccent(); });
+document.getElementById('bgColor').addEventListener('input', (e)=>{ state.bgColor = e.target.value; applyCanvasAccent(); });
 document.getElementById('wobble').addEventListener('change', (e)=>{ state.wobble = e.target.checked; });
 document.getElementById('showGuide').addEventListener('change', (e)=>{ state.showGuide = e.target.checked; });
 document.getElementById('showPointer').addEventListener('change', (e)=>{ state.showPointer = e.target.checked; });
@@ -435,6 +540,7 @@ document.getElementById('autoScroll').addEventListener('change', (e)=>{
   }
 });
 document.getElementById('showScrollbar').addEventListener('change', (e)=>{ state.showScrollbar = e.target.checked; });
+document.getElementById('hyphenate').addEventListener('change', (e)=>{ state.hyphenate = e.target.checked; layoutText(); });
 
 document.getElementById('textInput').addEventListener('input', (e)=>{
   state.text = e.target.value || ' ';
@@ -461,10 +567,12 @@ document.getElementById('resetBtn').addEventListener('click', ()=>{ layoutText()
 
 const rack = document.getElementById('rack');
 const menuToggleBtn = document.getElementById('menuToggleBtn');
+const themeToggleBtnEl = document.getElementById('themeToggleBtn');
 menuToggleBtn.addEventListener('click', ()=>{
   rack.classList.toggle('hidden');
   const hidden = rack.classList.contains('hidden');
   menuToggleBtn.classList.toggle('collapsed', hidden);
+  themeToggleBtnEl.classList.toggle('collapsed', hidden);
   menuToggleBtn.textContent = hidden ? '›' : '‹';
   menuToggleBtn.title = hidden ? 'Show menu' : 'Hide menu';
   applyZoom();
@@ -634,5 +742,12 @@ gifBtn.addEventListener('click', ()=>{
 document.fonts.ready.then(()=>{
   layoutText();
   applyZoom();
+  applyCanvasAccent();
   requestAnimationFrame(loop);
+});
+
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+themeToggleBtn.addEventListener('click', ()=>{
+  const isLight = document.body.classList.toggle('light-theme');
+  themeToggleBtn.textContent = isLight ? 'Dark' : 'Light';
 });
