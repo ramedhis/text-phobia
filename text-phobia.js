@@ -567,12 +567,12 @@ document.getElementById('resetBtn').addEventListener('click', ()=>{ layoutText()
 
 const rack = document.getElementById('rack');
 const menuToggleBtn = document.getElementById('menuToggleBtn');
-const themeToggleBtnEl = document.getElementById('themeToggleBtn');
+const themeToggleBtn = document.getElementById('themeToggleBtn');
 menuToggleBtn.addEventListener('click', ()=>{
   rack.classList.toggle('hidden');
   const hidden = rack.classList.contains('hidden');
   menuToggleBtn.classList.toggle('collapsed', hidden);
-  themeToggleBtnEl.classList.toggle('collapsed', hidden);
+  themeToggleBtn.classList.toggle('collapsed', hidden);
   menuToggleBtn.textContent = hidden ? '›' : '‹';
   menuToggleBtn.title = hidden ? 'Show menu' : 'Hide menu';
   applyZoom();
@@ -746,7 +746,6 @@ document.fonts.ready.then(()=>{
   requestAnimationFrame(loop);
 });
 
-const themeToggleBtn = document.getElementById('themeToggleBtn');
 themeToggleBtn.addEventListener('click', ()=>{
   const isLight = document.body.classList.toggle('light-theme');
   themeToggleBtn.textContent = isLight ? 'Dark' : 'Light';
