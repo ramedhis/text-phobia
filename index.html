@@ -1,247 +1,451 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>text-phobia</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&family=Archivo+Black&family=Bebas+Neue&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
-<link rel="stylesheet" href="text-phobia.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>text-phobia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&family=Archivo+Black&family=Bebas+Neue&family=Playfair+Display:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+    <link rel="stylesheet" href="text-phobia.css" />
+  </head>
+  <body>
+    <div class="app">
+      <button class="menu-toggle" id="menuToggleBtn" title="Hide menu">
+        ‹
+      </button>
+      <button
+        class="theme-toggle"
+        id="themeToggleBtn"
+        title="Toggle light / dark UI"
+      >
+        Light
+      </button>
 
-<div class="app">
+      <div class="rack" id="rack">
+        <p class="brand">text<span>phobia</span></p>
+        <p class="tagline">letters that flinch from your cursor</p>
 
-  <button class="menu-toggle" id="menuToggleBtn" title="Hide menu">‹</button>
-  <button class="theme-toggle" id="themeToggleBtn" title="Toggle light / dark UI">Light</button>
+        <div class="group">
+          <p class="group-title">Text</p>
+          <div class="field">
+            <textarea id="textInput">Move your pointer near me and watch what happens. I promise I'll calm back down once you leave me alone, though some of us take longer than others. Scroll to read more of this page if it runs long, just like a text file.</textarea>
+          </div>
+        </div>
 
-  <div class="rack" id="rack">
-    <p class="brand">text<span>phobia</span></p>
-    <p class="tagline">letters that flinch from your cursor</p>
+        <div class="group">
+          <p class="group-title">Type</p>
+          <div class="field">
+            <label>Typeface</label>
+            <select id="fontFamily">
+              <option value="'Space Grotesk', sans-serif" selected>
+                Space Grotesk
+              </option>
+              <option value="'Archivo Black', sans-serif">Archivo Black</option>
+              <option value="'Bebas Neue', sans-serif">Bebas Neue</option>
+              <option value="'Playfair Display', serif">
+                Playfair Display
+              </option>
+              <option value="'JetBrains Mono', monospace">
+                JetBrains Mono
+              </option>
+              <option value="Impact, sans-serif">Impact</option>
+              <option value="Georgia, serif">Georgia</option>
+              <option value="Arial, sans-serif">Arial</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="field-row">
+              <label>Font size</label
+              ><span class="val" id="fontSizeVal">48</span>
+            </div>
+            <input
+              type="range"
+              id="fontSize"
+              min="14"
+              max="200"
+              value="48"
+              step="1"
+            />
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label>Text color</label>
+              <input type="color" id="textColor" value="#f2ede2" />
+            </div>
+            <div class="field">
+              <label>Background</label>
+              <input type="color" id="bgColor" value="#0b0a08" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Text align</label>
+            <div class="toggle4" id="alignToggle">
+              <div class="chip active" data-align="left">Left</div>
+              <div class="chip" data-align="center">Center</div>
+              <div class="chip" data-align="right">Right</div>
+              <div class="chip" data-align="justify">Justify</div>
+            </div>
+          </div>
+          <div class="field checkfield" style="margin-top: 10px">
+            <input type="checkbox" id="hyphenate" />
+            <label for="hyphenate"
+              >Chop long words with a hyphen to fit the line</label
+            >
+          </div>
+        </div>
 
-    <div class="group">
-      <p class="group-title">Text</p>
-      <div class="field">
-        <textarea id="textInput">Move your pointer near me and watch what happens. I promise I'll calm back down once you leave me alone, though some of us take longer than others. Scroll to read more of this page if it runs long, just like a text file.</textarea>
+        <div class="group">
+          <p class="group-title">Canvas</p>
+          <div class="presets">
+            <div class="chip" data-w="1080" data-h="1080">Square</div>
+            <div class="chip active" data-w="1080" data-h="1350">Portrait</div>
+            <div class="chip" data-w="1080" data-h="1920">Story</div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label>Width</label>
+              <input
+                type="number"
+                id="canvasW"
+                value="1080"
+                min="200"
+                max="2160"
+                step="10"
+              />
+            </div>
+            <div class="field">
+              <label>Height</label>
+              <input
+                type="number"
+                id="canvasH"
+                value="1350"
+                min="200"
+                max="2160"
+                step="10"
+              />
+            </div>
+          </div>
+          <div class="field" style="margin-top: 4px">
+            <div class="field-row">
+              <label>Zoom</label><span class="val" id="zoomVal">100%</span>
+            </div>
+            <input
+              type="range"
+              id="zoom"
+              min="50"
+              max="250"
+              value="100"
+              step="5"
+            />
+          </div>
+        </div>
+
+        <div class="group">
+          <p class="group-title">Margins (px)</p>
+          <div class="row4">
+            <div class="field">
+              <label>Top</label>
+              <input
+                type="number"
+                id="marginTop"
+                value="90"
+                min="0"
+                max="800"
+                step="5"
+              />
+            </div>
+            <div class="field">
+              <label>Right</label>
+              <input
+                type="number"
+                id="marginRight"
+                value="90"
+                min="0"
+                max="800"
+                step="5"
+              />
+            </div>
+            <div class="field">
+              <label>Bottom</label>
+              <input
+                type="number"
+                id="marginBottom"
+                value="90"
+                min="0"
+                max="800"
+                step="5"
+              />
+            </div>
+            <div class="field">
+              <label>Left</label>
+              <input
+                type="number"
+                id="marginLeft"
+                value="90"
+                min="0"
+                max="800"
+                step="5"
+              />
+            </div>
+          </div>
+          <div class="field checkfield" style="margin-top: 10px">
+            <input type="checkbox" id="marginLock" />
+            <label for="marginLock">Keep ratio (link all 4 sides)</label>
+          </div>
+          <div class="field checkfield" style="margin-top: 10px">
+            <input type="checkbox" id="showGuide" checked />
+            <label for="showGuide">Show margin guide</label>
+          </div>
+          <p class="footnote">
+            Top/bottom margins define the visible page window for scrolling —
+            text scrolls in and out there like a text file's viewport. A letter
+            that's actively fleeing the cursor can still cross that line and be
+            seen up to the true canvas edge, just like it already could
+            sideways.
+          </p>
+        </div>
+
+        <div class="group">
+          <p class="group-title">Scroll</p>
+          <p class="footnote" style="margin-top: 0">
+            Wheel over the canvas, or drag the amber scrollbar, to move through
+            long text.
+          </p>
+          <div class="field checkfield" style="margin-top: 8px">
+            <input type="checkbox" id="autoScroll" />
+            <label for="autoScroll"
+              >Auto-scroll (top → bottom, then stops)</label
+            >
+          </div>
+          <div class="field">
+            <div class="field-row">
+              <label>Auto-scroll speed</label
+              ><span class="val" id="autoScrollSpeedVal">40</span>
+            </div>
+            <input
+              type="range"
+              id="autoScrollSpeed"
+              min="5"
+              max="300"
+              value="40"
+              step="5"
+            />
+          </div>
+          <div class="field checkfield" style="margin-top: 8px">
+            <input type="checkbox" id="showScrollbar" checked />
+            <label for="showScrollbar">Show scrollbar</label>
+          </div>
+        </div>
+
+        <div class="group">
+          <p class="group-title">Fear physics</p>
+          <div class="field">
+            <div class="field-row">
+              <label>Fear radius</label
+              ><span class="val" id="radiusVal">140</span>
+            </div>
+            <input
+              type="range"
+              id="radius"
+              min="40"
+              max="400"
+              value="140"
+              step="5"
+            />
+          </div>
+          <div class="field">
+            <div class="field-row">
+              <label>Flee strength</label
+              ><span class="val" id="strengthVal">14</span>
+            </div>
+            <input
+              type="range"
+              id="strength"
+              min="1"
+              max="40"
+              value="14"
+              step="1"
+            />
+          </div>
+          <div class="field">
+            <div class="field-row">
+              <label>Return speed</label
+              ><span class="val" id="springVal">0.08</span>
+            </div>
+            <input
+              type="range"
+              id="spring"
+              min="1"
+              max="30"
+              value="8"
+              step="1"
+            />
+          </div>
+          <div class="field">
+            <div class="field-row">
+              <label>Damping</label><span class="val" id="dampVal">0.85</span>
+            </div>
+            <input
+              type="range"
+              id="damp"
+              min="60"
+              max="98"
+              value="85"
+              step="1"
+            />
+          </div>
+          <div class="field">
+            <div class="field-row">
+              <label>Tremble intensity</label
+              ><span class="val" id="trembleVal">2</span>
+            </div>
+            <input
+              type="range"
+              id="tremble"
+              min="0"
+              max="6"
+              value="2"
+              step="1"
+            />
+          </div>
+          <div class="field">
+            <div class="field-row">
+              <label>Calm-down speed</label
+              ><span class="val" id="calmVal">0.8</span>
+            </div>
+            <input
+              type="range"
+              id="calmSpeed"
+              min="1"
+              max="50"
+              value="8"
+              step="1"
+            />
+          </div>
+          <div class="field checkfield">
+            <input type="checkbox" id="randomizeCalm" checked />
+            <label for="randomizeCalm">Randomize reaction per letter</label>
+          </div>
+          <p class="footnote">
+            Each letter gets its own flee angle, flee speed, and calm-down rate
+            so the crowd doesn't move as one — some panic harder and settle
+            slower than others.
+          </p>
+          <div class="field checkfield" style="margin-top: 10px">
+            <input type="checkbox" id="wobble" checked />
+            <label for="wobble">Wobble rotation when fleeing</label>
+          </div>
+        </div>
+
+        <div class="group">
+          <p class="group-title">Cursor mode</p>
+          <div class="toggle2">
+            <div class="chip active" id="modeMouse">My mouse</div>
+            <div class="chip" id="modeAuto">Auto path</div>
+          </div>
+          <div class="field checkfield" style="margin-top: 12px">
+            <input type="checkbox" id="showPointer" checked />
+            <label for="showPointer">Show pointer dot</label>
+          </div>
+          <div class="field checkfield">
+            <input type="checkbox" id="showRadius" checked />
+            <label for="showRadius">Show fear radius indicator</label>
+          </div>
+          <div class="field checkfield">
+            <input type="checkbox" id="showPanic" checked />
+            <label for="showPanic">Show panic bar</label>
+          </div>
+        </div>
+
+        <div class="group">
+          <button class="btn reset" id="resetBtn">
+            Reset letter positions
+          </button>
+        </div>
+
+        <div class="group">
+          <p class="group-title">Export</p>
+          <div class="rec-btn" id="recBtn">
+            <div class="rec-dot" id="recDot"></div>
+            <span id="recLabel">Record video</span>
+          </div>
+          <div class="field-row" style="margin-top: 9px">
+            <span class="timer" id="recTimer">0:00</span>
+            <span class="status" id="statusText">Ready</span>
+          </div>
+          <div class="progress" id="progressBar" style="margin-top: 8px">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="row2" style="margin-top: 11px">
+            <div class="field">
+              <label>Duration (s)</label>
+              <input
+                type="number"
+                id="durationInput"
+                value="5"
+                min="2"
+                max="15"
+              />
+            </div>
+            <div class="field">
+              <label>FPS</label>
+              <select id="fpsInput">
+                <option value="15">15</option>
+                <option value="24" selected>24</option>
+                <option value="30">30</option>
+              </select>
+            </div>
+          </div>
+          <button
+            class="exp-btn"
+            id="gifBtn"
+            style="width: 100%; margin-top: 10px"
+          >
+            Export GIF
+          </button>
+          <a
+            class="dl"
+            id="videoDl"
+            style="width: 100%; justify-content: center; margin-top: 8px"
+            download="text-phobia.webm"
+            >Download video ↓</a
+          >
+          <a
+            class="dl"
+            id="gifDl"
+            style="width: 100%; justify-content: center; margin-top: 8px"
+            download="text-phobia.gif"
+            >Download GIF ↓</a
+          >
+          <p class="footnote" style="margin-top: 10px">
+            WebM plays directly on most platforms; convert to MP4 with any free
+            converter if Instagram needs it. GIF is capped at ~8s/20fps. Set
+            zoom back to 100% before exporting — export always captures full
+            resolution regardless of zoom.
+          </p>
+        </div>
+      </div>
+
+      <div class="stage-wrap">
+        <div class="stage" id="stage">
+          <canvas id="canvas" width="1080" height="1350"></canvas>
+          <div class="fear-badge" id="radiusBadge">
+            <span>RADIUS</span><span><span id="badgeRadius">140</span>px</span>
+          </div>
+          <div class="panic" id="panicBadge">
+            PANIC
+            <div class="panic-bar">
+              <div class="panic-fill" id="panicFill"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="group">
-      <p class="group-title">Type</p>
-      <div class="field">
-        <label>Typeface</label>
-        <select id="fontFamily">
-          <option value="'Space Grotesk', sans-serif" selected>Space Grotesk</option>
-          <option value="'Archivo Black', sans-serif">Archivo Black</option>
-          <option value="'Bebas Neue', sans-serif">Bebas Neue</option>
-          <option value="'Playfair Display', serif">Playfair Display</option>
-          <option value="'JetBrains Mono', monospace">JetBrains Mono</option>
-          <option value="Impact, sans-serif">Impact</option>
-          <option value="Georgia, serif">Georgia</option>
-          <option value="Arial, sans-serif">Arial</option>
-        </select>
-      </div>
-      <div class="field">
-        <div class="field-row"><label>Font size</label><span class="val" id="fontSizeVal">48</span></div>
-        <input type="range" id="fontSize" min="14" max="200" value="48" step="1">
-      </div>
-      <div class="row2">
-        <div class="field">
-          <label>Text color</label>
-          <input type="color" id="textColor" value="#f2ede2">
-        </div>
-        <div class="field">
-          <label>Background</label>
-          <input type="color" id="bgColor" value="#0b0a08">
-        </div>
-      </div>
-      <div class="field">
-        <label>Text align</label>
-        <div class="toggle4" id="alignToggle">
-          <div class="chip active" data-align="left">Left</div>
-          <div class="chip" data-align="center">Center</div>
-          <div class="chip" data-align="right">Right</div>
-          <div class="chip" data-align="justify">Justify</div>
-        </div>
-      </div>
-      <div class="field checkfield" style="margin-top:10px;">
-        <input type="checkbox" id="hyphenate">
-        <label for="hyphenate">Chop long words with a hyphen to fit the line</label>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="group-title">Canvas</p>
-      <div class="presets">
-        <div class="chip" data-w="1080" data-h="1080">Square</div>
-        <div class="chip active" data-w="1080" data-h="1350">Portrait</div>
-        <div class="chip" data-w="1080" data-h="1920">Story</div>
-      </div>
-      <div class="row2">
-        <div class="field">
-          <label>Width</label>
-          <input type="number" id="canvasW" value="1080" min="200" max="2160" step="10">
-        </div>
-        <div class="field">
-          <label>Height</label>
-          <input type="number" id="canvasH" value="1350" min="200" max="2160" step="10">
-        </div>
-      </div>
-      <div class="field" style="margin-top:4px;">
-        <div class="field-row"><label>Zoom</label><span class="val" id="zoomVal">100%</span></div>
-        <input type="range" id="zoom" min="50" max="250" value="100" step="5">
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="group-title">Margins (px)</p>
-      <div class="row4">
-        <div class="field">
-          <label>Top</label>
-          <input type="number" id="marginTop" value="90" min="0" max="800" step="5">
-        </div>
-        <div class="field">
-          <label>Right</label>
-          <input type="number" id="marginRight" value="90" min="0" max="800" step="5">
-        </div>
-        <div class="field">
-          <label>Bottom</label>
-          <input type="number" id="marginBottom" value="90" min="0" max="800" step="5">
-        </div>
-        <div class="field">
-          <label>Left</label>
-          <input type="number" id="marginLeft" value="90" min="0" max="800" step="5">
-        </div>
-      </div>
-      <div class="field checkfield" style="margin-top:10px;">
-        <input type="checkbox" id="marginLock">
-        <label for="marginLock">Keep ratio (link all 4 sides)</label>
-      </div>
-      <div class="field checkfield" style="margin-top:10px;">
-        <input type="checkbox" id="showGuide" checked>
-        <label for="showGuide">Show margin guide</label>
-      </div>
-      <p class="footnote">Top/bottom margins define the visible page window for scrolling — text scrolls in and out there like a text file's viewport. A letter that's actively fleeing the cursor can still cross that line and be seen up to the true canvas edge, just like it already could sideways.</p>
-    </div>
-
-    <div class="group">
-      <p class="group-title">Scroll</p>
-      <p class="footnote" style="margin-top:0;">Wheel over the canvas, or drag the amber scrollbar, to move through long text.</p>
-      <div class="field checkfield" style="margin-top:8px;">
-        <input type="checkbox" id="autoScroll">
-        <label for="autoScroll">Auto-scroll (top → bottom, then stops)</label>
-      </div>
-      <div class="field">
-        <div class="field-row"><label>Auto-scroll speed</label><span class="val" id="autoScrollSpeedVal">40</span></div>
-        <input type="range" id="autoScrollSpeed" min="5" max="300" value="40" step="5">
-      </div>
-      <div class="field checkfield" style="margin-top:8px;">
-        <input type="checkbox" id="showScrollbar" checked>
-        <label for="showScrollbar">Show scrollbar</label>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="group-title">Fear physics</p>
-      <div class="field">
-        <div class="field-row"><label>Fear radius</label><span class="val" id="radiusVal">140</span></div>
-        <input type="range" id="radius" min="40" max="400" value="140" step="5">
-      </div>
-      <div class="field">
-        <div class="field-row"><label>Flee strength</label><span class="val" id="strengthVal">14</span></div>
-        <input type="range" id="strength" min="1" max="40" value="14" step="1">
-      </div>
-      <div class="field">
-        <div class="field-row"><label>Return speed</label><span class="val" id="springVal">0.08</span></div>
-        <input type="range" id="spring" min="1" max="30" value="8" step="1">
-      </div>
-      <div class="field">
-        <div class="field-row"><label>Damping</label><span class="val" id="dampVal">0.85</span></div>
-        <input type="range" id="damp" min="60" max="98" value="85" step="1">
-      </div>
-      <div class="field">
-        <div class="field-row"><label>Tremble intensity</label><span class="val" id="trembleVal">2</span></div>
-        <input type="range" id="tremble" min="0" max="6" value="2" step="1">
-      </div>
-      <div class="field">
-        <div class="field-row"><label>Calm-down speed</label><span class="val" id="calmVal">0.8</span></div>
-        <input type="range" id="calmSpeed" min="1" max="50" value="8" step="1">
-      </div>
-      <div class="field checkfield">
-        <input type="checkbox" id="randomizeCalm" checked>
-        <label for="randomizeCalm">Randomize reaction per letter</label>
-      </div>
-      <p class="footnote">Each letter gets its own flee angle, flee speed, and calm-down rate so the crowd doesn't move as one — some panic harder and settle slower than others.</p>
-      <div class="field checkfield" style="margin-top:10px;">
-        <input type="checkbox" id="wobble" checked>
-        <label for="wobble">Wobble rotation when fleeing</label>
-      </div>
-    </div>
-
-    <div class="group">
-      <p class="group-title">Cursor mode</p>
-      <div class="toggle2">
-        <div class="chip active" id="modeMouse">My mouse</div>
-        <div class="chip" id="modeAuto">Auto path</div>
-      </div>
-      <div class="field checkfield" style="margin-top:12px;">
-        <input type="checkbox" id="showPointer" checked>
-        <label for="showPointer">Show pointer dot</label>
-      </div>
-      <div class="field checkfield">
-        <input type="checkbox" id="showRadius" checked>
-        <label for="showRadius">Show fear radius indicator</label>
-      </div>
-      <div class="field checkfield">
-        <input type="checkbox" id="showPanic" checked>
-        <label for="showPanic">Show panic bar</label>
-      </div>
-    </div>
-
-    <div class="group">
-      <button class="btn reset" id="resetBtn">Reset letter positions</button>
-    </div>
-
-    <div class="group">
-      <p class="group-title">Export</p>
-      <div class="rec-btn" id="recBtn"><div class="rec-dot" id="recDot"></div><span id="recLabel">Record video</span></div>
-      <div class="field-row" style="margin-top:9px;">
-        <span class="timer" id="recTimer">0:00</span>
-        <span class="status" id="statusText">Ready</span>
-      </div>
-      <div class="progress" id="progressBar" style="margin-top:8px;"><div class="progress-fill" id="progressFill"></div></div>
-      <div class="row2" style="margin-top:11px;">
-        <div class="field">
-          <label>Duration (s)</label>
-          <input type="number" id="durationInput" value="5" min="2" max="15">
-        </div>
-        <div class="field">
-          <label>FPS</label>
-          <select id="fpsInput">
-            <option value="15">15</option>
-            <option value="24" selected>24</option>
-            <option value="30">30</option>
-          </select>
-        </div>
-      </div>
-      <button class="exp-btn" id="gifBtn" style="width:100%; margin-top:10px;">Export GIF</button>
-      <a class="dl" id="videoDl" style="width:100%; justify-content:center; margin-top:8px;" download="text-phobia.webm">Download video ↓</a>
-      <a class="dl" id="gifDl" style="width:100%; justify-content:center; margin-top:8px;" download="text-phobia.gif">Download GIF ↓</a>
-      <p class="footnote" style="margin-top:10px;">WebM plays directly on most platforms; convert to MP4 with any free converter if Instagram needs it. GIF is capped at ~8s/20fps. Set zoom back to 100% before exporting — export always captures full resolution regardless of zoom.</p>
-    </div>
-  </div>
-
-  <div class="stage-wrap">
-    <div class="stage" id="stage">
-      <canvas id="canvas" width="1080" height="1350"></canvas>
-      <div class="fear-badge" id="radiusBadge"><span>RADIUS</span><span><span id="badgeRadius">140</span>px</span></div>
-      <div class="panic" id="panicBadge">PANIC<div class="panic-bar"><div class="panic-fill" id="panicFill"></div></div></div>
-    </div>
-  </div>
-
-</div>
-
-<script src="text-phobia.js"></script>
-</body>
+    <script src="text-phobia.js"></script>
+  </body>
 </html>
