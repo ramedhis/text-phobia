@@ -268,31 +268,101 @@
         box-shadow: 0 8px 24px rgba(0,0,0,0.12);
         backdrop-filter: blur(6px);
       }
-      .title { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; margin: 0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+      .title {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        margin: 0 0 10px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+      }
       .title span.tag { color: #d1483a; }
       .row { margin-bottom: 9px; }
-      .row-top { display:flex; justify-content:space-between; font-size: 10.5px; color:#6d6d68; margin-bottom:3px; }
+      .row-top {
+        display:flex;
+        justify-content:space-between;
+        font-size: 10.5px; 
+        color:#6d6d68; 
+        margin-bottom:3px;
+      }
       .val { color:#161615; font-variant-numeric: tabular-nums; }
       input[type=range] {
-        -webkit-appearance:none; appearance:none; width:100%; height:16px; background:transparent; cursor:pointer;
+        -webkit-appearance:none;
+        appearance:none;
+        width:100%;
+        height:16px;
+        background:transparent;
+        cursor:pointer;
       }
-      input[type=range]::-webkit-slider-runnable-track { height:3px; background:#d9d9d5; border-radius:2px; }
-      input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:12px;height:12px;border-radius:50%; background:#161615; cursor:pointer; margin-top:-4.5px; }
-      .toggles { display:flex; gap:8px; margin: 8px 0 10px; }
-      .chip { flex:1; text-align:center; font-size:10px; padding:6px 4px; border:1px solid #d9d9d5; border-radius:5px; cursor:pointer; color:#6d6d68; user-select:none; }
-      .chip.active { background: rgba(22,22,21,0.08); border-color:#161615; color:#161615; }
-      .btnrow { display:flex; gap:8px; margin-top:4px; }
-      button { flex:1; font-family: inherit; font-size: 11px; padding: 7px 8px; border-radius: 6px; border:1px solid #d9d9d5; background:#f0f0ed; color:#161615; cursor:pointer; }
+      input[type=range]::-webkit-slider-runnable-track {
+        height:3px;
+        background:#d9d9d5;
+        border-radius:2px;
+      }
+      input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance:none;
+        width:12px;
+        height:12px;
+        border-radius:50%;
+        background:#161615;
+        cursor:pointer;
+        margin-top:-4.5px;
+      }
+      .toggles {
+        display:flex;
+        gap:8px;
+        margin: 8px 0 10px;
+      }
+      .chip {
+        flex:1;
+        text-align:center;
+        font-size:10px;
+        padding:6px 4px;
+        border:1px solid #d9d9d5;
+        border-radius:5px;
+        cursor:pointer;
+        color:#6d6d68;
+        user-select:none;
+      }
+      .chip.active {
+        background: rgba(22,22,21,0.08);
+        border-color:#161615;
+        color:#161615;
+      }
+      .btnrow {
+        display:flex;
+        gap:8px;
+        margin-top:4px;
+      }
+      button {
+        flex:1;
+        font-family: inherit;
+        font-size: 11px;
+        padding: 7px 8px;
+        border-radius: 6px;
+        border:1px solid #d9d9d5;
+        background:#f0f0ed;
+        color:#161615;
+        cursor:pointer;
+      }
       button:hover { border-color:#161615; }
       button.stop { color:#d1483a; border-color:#d1483a; }
       .drag { cursor: move; }
       .mini {
         display:none;
-        width:44px; height:44px; border-radius:50%;
-        background:#fffffff0; border:1px solid #d9d9d5;
-        color:#161615; font-family:'JetBrains Mono', monospace, monospace;
-        font-size:16px; align-items:center; justify-content:center;
-        cursor:move; box-shadow: 0 8px 24px rgba(0,0,0,0.12); backdrop-filter: blur(6px);
+        width:44px; height:44px;
+        border-radius:50%;
+        background:#fffffff0;
+        border:1px solid #d9d9d5;
+        color:#161615;
+        font-family:'JetBrains Mono', monospace, monospace;
+        font-size:16px;
+        align-items:center;
+        justify-content:center;
+        cursor:move;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        backdrop-filter: blur(6px);
         user-select:none;
       }
     </style>
