@@ -48,7 +48,7 @@ body {
   flex: none;
   background: var(--panel);
   border-right: 1px solid var(--border-c);
-  padding: 20px 18px 40px;
+  padding: 20px 18px 20px;
   max-height: 100vh;
   overflow-y: auto;
 }
@@ -106,6 +106,8 @@ body {
 }
 .group:last-child {
   border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 .group-title {
   font-size: 10px;
