@@ -722,10 +722,6 @@ const recLabel = document.getElementById("recLabel");
 const recTimer = document.getElementById("recTimer");
 const statusText = document.getElementById("statusText");
 const videoDl = document.getElementById("videoDl");
-const gifBtn = document.getElementById("gifBtn");
-const gifDl = document.getElementById("gifDl");
-const progressBar = document.getElementById("progressBar");
-const progressFill = document.getElementById("progressFill");
 
 function fmtTime(s) {
   const m = Math.floor(s / 60);
@@ -785,66 +781,6 @@ recBtn.addEventListener("click", () => {
   } else {
     startVideoRecording();
   }
-});
-
-gifBtn.addEventListener("click", () => {
-  const duration = Math.min(
-    parseFloat(document.getElementById("durationInput").value) || 5,
-    8,
-  );
-  const fps = Math.min(
-    parseInt(document.getElementById("fpsInput").value) || 15,
-    20,
-  );
-  const gif = new GIF({
-    workers: 2,
-    quality: 10,
-    width: canvas.width,
-    height: canvas.height,
-    workerScript:
-      "https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js",
-  });
-
-  gifBtn.disabled = true;
-  gifBtn.textContent = "Capturing…";
-  statusText.textContent =
-    "Capturing GIF frames — move your mouse over the canvas";
-  statusText.classList.add("active");
-  gifDl.style.display = "none";
-
-  const frameDelay = 1000 / fps;
-  const totalFrames = Math.round(duration * fps);
-  let framesCaptured = 0;
-
-  const captureInterval = setInterval(() => {
-    gif.addFrame(ctx, { copy: true, delay: frameDelay });
-    framesCaptured++;
-    recTimer.textContent = fmtTime(framesCaptured / fps);
-    if (framesCaptured >= totalFrames) {
-      clearInterval(captureInterval);
-      gifBtn.textContent = "Encoding…";
-      statusText.textContent = "Encoding GIF…";
-      progressBar.style.display = "block";
-      gif.render();
-    }
-  }, frameDelay);
-
-  gif.on("progress", (p) => {
-    progressFill.style.width = Math.round(p * 100) + "%";
-  });
-
-  gif.on("finished", (blob) => {
-    const url = URL.createObjectURL(blob);
-    gifDl.href = url;
-    gifDl.style.display = "inline-flex";
-    gifBtn.disabled = false;
-    gifBtn.textContent = "Export GIF";
-    statusText.textContent = "GIF ready";
-    statusText.classList.remove("active");
-    progressBar.style.display = "none";
-    progressFill.style.width = "0%";
-    recTimer.textContent = "0:00";
-  });
 });
 
 document.fonts.ready.then(() => {
