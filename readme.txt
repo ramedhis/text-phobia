@@ -15,7 +15,7 @@ This project is part of my [creative-coding](https://github.com/ramedhis/creativ
 This repository is retained for GitHub Pages deployment.
 All future development takes place in the central repository.
 
-Source Code: [creative-coding/web/burn-this-cloth](https://github.com/ramedhis/creative-coding/tree/main/projects/web/text-phobia)
+Source Code: [creative-coding/web/burn-this-cloth](https://github.com/ramedhis/creative-coding/tree/main/web/text-phobia)
 
 Notes:
 A Tampermonkey userscript version is also available
